@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.mongoDbDeploymentName }}
+  labels:
+    app: {{ .Values.mongoDbDeploymentAppLabel }}
+spec:
+  replicas: {{ .Values.mongoDbDeploymentReplicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Values.mongoDbDeploymentAppLabel }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.mongoDbDeploymentAppLabel }}
+    spec:
+      containers:
+      - name: {{ .Values.mongoDbDeploymentContainerName }}
+        image: mongo
+        ports:
+        - containerPort: {{ .Values.mongoDbDeploymentContainerPort }}
+        env:
+        - name: MONGO_INITDB_ROOT_USERNAME
+          valueFrom: 
+            secretKeyRef:
+              name: {{ .Values.mongoDbSecretRootUsername }}
+              key: {{ .Values.mongoDbSecretRootUsernameKey }}
+        - name: MONGO_INITDB_ROOT_PASSWORD
+          valueFrom: 
+            secretKeyRef:
+              name: {{ .Values.mongoDbSecretRootPassword }}
+              key: {{ .Values.mongoDbSecretRootPasswordKey }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongo  # KEEP AS-IS. Otherwise, mongo-express complains `/docker-entrypoint.sh: line 15: mongo: Name does not resolve`
+spec:
+  selector:
+    app: {{ .Values.mongoDbDeploymentAppLabel }}
+  ports:
+    - protocol: {{ .Values.mongoDbServicePortProtocol }}
+      port: {{ .Values.mongoDbServicePortNumber }}
+      targetPort: {{ .Values.mongoDbServiceTargetPort }}

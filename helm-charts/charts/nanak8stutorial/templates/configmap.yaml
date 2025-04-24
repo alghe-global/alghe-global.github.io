@@ -1,0 +1,6 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.mongoExpressName }}
+data:
+  database_url: {{ .Values.mongoExpressDbUrl }}
