@@ -39,6 +39,39 @@
         "mongoDbDeploymentReplicaCount": {
             "type": "integer"
         },
+        "mongoDbPvAccessMode": {
+            "type": "string"
+        },
+        "mongoDbPvCapacity": {
+            "type": "string"
+        },
+        "mongoDbPvName": {
+            "type": "string"
+        },
+        "mongoDbPvPath": {
+            "type": "string"
+        },
+        "mongoDbPvStorageClassName": {
+            "type": "string"
+        },
+        "mongoDbPvVolumeMode": {
+            "type": "string"
+        },
+        "mongoDbPvcAccessMode": {
+            "type": "string"
+        },
+        "mongoDbPvcName": {
+            "type": "string"
+        },
+        "mongoDbPvcStorageClassName": {
+            "type": "string"
+        },
+        "mongoDbScBindingMode": {
+            "type": "string"
+        },
+        "mongoDbScName": {
+            "type": "string"
+        },
         "mongoDbSecretRootPassword": {
             "type": "string"
         },
@@ -59,6 +92,12 @@
         },
         "mongoDbServiceTargetPort": {
             "type": "integer"
+        },
+        "mongoDbVolumeMountPath": {
+            "type": "string"
+        },
+        "mongoDbVolumeName": {
+            "type": "string"
         },
         "mongoExpressDbUrl": {
             "type": "string"
