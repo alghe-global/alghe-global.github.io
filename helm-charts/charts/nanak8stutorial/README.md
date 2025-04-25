@@ -6,8 +6,6 @@ Nana has put out a [tutorial on YouTube on Nov 6, 2020](https://www.youtube.com/
 
 In this tutorial one is walked through creating resources with Kubernetes such as deployments, services, ingress, volumes and StatefulSets.
 
-> NOTE: StatefulSets are not covered by this chart.
-
 > WARNING: This chart is provided as a bare bones chart. Secrets in `values.yaml` are in plaintext. DO NOT STORE secrets used in production (whatever stage) in this file. Doing so is at YOUR OWN RISK, especially if committing to a public repo.
 
 ## Prerequisites
@@ -18,6 +16,7 @@ This chart was used on a Debian 12 machine with kernel 6.1.0-33-amd64, minikube 
 * Helm v3.17.2
 * Ingress addon enabled for minikube
 * Dashboard initialized with minikube
+* Host machine's /etc/hosts populated for `dashboard.com` entry
 
 ## Get Repository Info
 

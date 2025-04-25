@@ -1,24 +1,24 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
-  name: {{ .Values.mongoDbDeploymentName }}
+  name: {{ .Values.mongoDbStatefulSetName }}
   labels:
-    app: {{ .Values.mongoDbDeploymentAppLabel }}
+    app: {{ .Values.mongoDbStatefulSetAppLabel }}
 spec:
-  replicas: {{ .Values.mongoDbDeploymentReplicaCount }}
+  replicas: {{ .Values.mongoDbStatefulSetReplicaCount }}
   selector:
     matchLabels:
-      app: {{ .Values.mongoDbDeploymentAppLabel }}
+      app: {{ .Values.mongoDbStatefulSetAppLabel }}
   template:
     metadata:
       labels:
-        app: {{ .Values.mongoDbDeploymentAppLabel }}
+        app: {{ .Values.mongoDbStatefulSetAppLabel }}
     spec:
       containers:
-      - name: {{ .Values.mongoDbDeploymentContainerName }}
+      - name: {{ .Values.mongoDbStatefulSetContainerName }}
         image: mongo
         ports:
-        - containerPort: {{ .Values.mongoDbDeploymentContainerPort }}
+        - containerPort: {{ .Values.mongoDbStatefulSetContainerPort }}
         env:
         - name: MONGO_INITDB_ROOT_USERNAME
           valueFrom: 
@@ -77,7 +77,8 @@ metadata:
   name: mongo  # KEEP AS-IS. Otherwise, mongo-express complains `/docker-entrypoint.sh: line 15: mongo: Name does not resolve`
 spec:
   selector:
-    app: {{ .Values.mongoDbDeploymentAppLabel }}
+    app: {{ .Values.mongoDbStatefulSetAppLabel }}
+  clusterIP: {{ .Values.mongoDbServiceClusterIP }}
   ports:
     - protocol: {{ .Values.mongoDbServicePortProtocol }}
       port: {{ .Values.mongoDbServicePortNumber }}

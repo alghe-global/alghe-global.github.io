@@ -24,21 +24,6 @@
             },
             "type": "object"
         },
-        "mongoDbDeploymentAppLabel": {
-            "type": "string"
-        },
-        "mongoDbDeploymentContainerName": {
-            "type": "string"
-        },
-        "mongoDbDeploymentContainerPort": {
-            "type": "integer"
-        },
-        "mongoDbDeploymentName": {
-            "type": "string"
-        },
-        "mongoDbDeploymentReplicaCount": {
-            "type": "integer"
-        },
         "mongoDbPvAccessMode": {
             "type": "string"
         },
@@ -84,6 +69,9 @@
         "mongoDbSecretRootUsernameKey": {
             "type": "string"
         },
+        "mongoDbServiceClusterIP": {
+            "type": "string"
+        },
         "mongoDbServicePortNumber": {
             "type": "integer"
         },
@@ -91,6 +79,21 @@
             "type": "string"
         },
         "mongoDbServiceTargetPort": {
+            "type": "integer"
+        },
+        "mongoDbStatefulSetAppLabel": {
+            "type": "string"
+        },
+        "mongoDbStatefulSetContainerName": {
+            "type": "string"
+        },
+        "mongoDbStatefulSetContainerPort": {
+            "type": "integer"
+        },
+        "mongoDbStatefulSetName": {
+            "type": "string"
+        },
+        "mongoDbStatefulSetReplicaCount": {
             "type": "integer"
         },
         "mongoDbVolumeMountPath": {

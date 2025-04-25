@@ -3,10 +3,10 @@ entries:
   NanaK8sTutorial:
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2025-04-24T15:07:10.080642835+01:00"
-    digest: 08abe1af632bfe2b86f3beec85b5ad0c0ff40a9d100a68960f9d550d219aae8e
+    created: "2025-04-25T12:41:52.266120827+01:00"
+    digest: 0eee7e3923f01b79a4f9482578478f9599977620ecb044d98d1becaa85f8f668
     name: NanaK8sTutorial
     urls:
     - NanaK8sTutorial-1.0.0.tgz
     version: 1.0.0
-generated: "2025-04-24T15:07:10.08014293+01:00"
+generated: "2025-04-25T12:41:52.26558007+01:00"

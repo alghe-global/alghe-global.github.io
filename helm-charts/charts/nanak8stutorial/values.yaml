@@ -45,15 +45,16 @@ mongoExpressDbUrlKey: database_url
 ## @section MongoDB parameters
 ## MongoDB parameters are what is used to populate deployment and service for MongoDb
 ##
-## @param mongoDbDeploymentName The name for this deployment set as metadata
-## @param mongoDbDeploymentAppLabel Used for both as app label and as selector for matchLabels
-## @param mongoDbDeploymentReplicaCount How many replicas to be used with this deployment
-## @param mongoDbDeploymentContainerName The name associated with the container (image used: `mongo')
-## @param mongoDbDeploymentContainerPort The port at which this container is reachable
+## @param mongoDbStatefulSetName The name for this statefulset set as metadata
+## @param mongoDbStatefulSetAppLabel Used for both as app label and as selector for matchLabels
+## @param mongoDbStatefulSetReplicaCount How many replicas to be used with this statefulset
+## @param mongoDbStatefulSetContainerName The name associated with the container (image used: `mongo')
+## @param mongoDbStatefulSetContainerPort The port at which this container is reachable
 ## @param mongoDbSecretRootUsername The secret identified by this name at which to find the username
 ## @param mongoDbSecretRootUsernameKey The key in the secret which identifies the username to use
 ## @param mongoDbSecretRootPassword The secret identified by this name at which to find the password
 ## @param mongoDbSecretRootPasswordKey The key in the secret which identifies the password to use
+## @param mongoDbServiceClusterIP The cluster IP associated with this service (leave None)
 ## @param mongoDbServicePortProtocol The protocol used by the service for the ports configured
 ## @param mongoDbServicePortNumber The port number at which containers that are to be served by this service, listen
 ## @param mongoDbServiceTargetPort The port number at which the service accepts requests to be forwarded to the containers
@@ -70,15 +71,16 @@ mongoExpressDbUrlKey: database_url
 ## @param mongoDbPvcAccessMode The access mode associated with this PersistentVolumeClaim
 ## @param mongoDbScName The StorageClass name
 ## @param mongoDbScBindingMode The volume binding mode for this StorageClass
-mongoDbDeploymentName: mongodb-deployment
-mongoDbDeploymentAppLabel: mongodb
-mongoDbDeploymentReplicaCount: 1
-mongoDbDeploymentContainerName: mongodb
-mongoDbDeploymentContainerPort: 27017
+mongoDbStatefulSetName: mongodb
+mongoDbStatefulSetAppLabel: mongodb
+mongoDbStatefulSetReplicaCount: 1
+mongoDbStatefulSetContainerName: mongodb
+mongoDbStatefulSetContainerPort: 27017
 mongoDbSecretRootUsername: mongodb-secret
 mongoDbSecretRootUsernameKey: mongo-root-username
 mongoDbSecretRootPassword: mongodb-secret
 mongoDbSecretRootPasswordKey: mongo-root-password
+mongoDbServiceClusterIP: None
 mongoDbServicePortProtocol: TCP
 mongoDbServicePortNumber: 27017
 mongoDbServiceTargetPort: 27017
