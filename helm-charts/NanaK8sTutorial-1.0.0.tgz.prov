@@ -1,0 +1,27 @@
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA512
+
+apiVersion: v2
+appVersion: 1.16.0
+name: NanaK8sTutorial
+version: 1.0.0
+
+...
+files:
+  NanaK8sTutorial-1.0.0.tgz: sha256:0eee7e3923f01b79a4f9482578478f9599977620ecb044d98d1becaa85f8f668
+-----BEGIN PGP SIGNATURE-----
+
+wsFcBAEBCgAQBQJoC3TbCRDL43Bb1JSI/AAABe0QACOAfw8UtLJhJmJOw6AM8Nfs
+Qg4GEl5jbYf3SlBAXlLCX/wf5FereOc0D4q4TqqUrkz+qbKqMZ8Pe9hlJ0xoy4Rs
+wHAyMzwxxS3b8EDY5tpY76qbOH2GCtPVWEcDXHvcv6pbHT0E8asl8bKiuYxHMkDF
+xIGxtBoVTuwDcsbIsgJWv+YNeexcf/p/zUqXe6uN9EMRR0XxkXVCxmV29mjypMtt
+/pa1Crr1bVRIKU/oLOkDvit6vBFP4CcGYzSkucburtwWq/BzL9qH+C3XJaItHCIQ
+bxF8bKzswhIeQ8v1qeJbcPc3goSLyQ/JvLwc5ZsaEiwyZ40dM2UysHW38jZgkX4r
+FUHFRENKMHRoNb6KVtP3mC7+sWm6sZ4fetX/cgaO+0rZ+N9ytYNJgI+OfY0RRI5w
+socea6nopDXTKB8uKZC+na3ELB1CcOF+BWe6sHpdh0r2Uoic9t67u3DmmZUwxH1G
+rik5SPWp/nTj5hzHcOcRo9cf2bdervCJ8ru95fg+7yu+qXama3a6AsE0SnwOQW4d
+33ZsgPZ/pLVX+wVDuuVsDO4aL8PiLjTF2681bxmt+6Hu59zuHs72oxf/Ih6WImDn
+ufIcVOKlbXuFvr9+X76D890V1mc0I7olKxpyrekf3V3f4eo0ZzQd4MiCelT7zAZQ
+ZnOytXMpXUVROClleyPy
+=Q3z0
+-----END PGP SIGNATURE-----

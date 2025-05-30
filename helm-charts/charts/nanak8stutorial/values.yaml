@@ -1,0 +1,121 @@
+# SPDX-License-Identifier: APACHE-2.0
+
+## @section Dashboard Ingress parameters
+## Dashboard Ingress parameters
+## After populating /etc/hosts with the address to IP mapping
+## connecting to `hostname' will retrieve the K8s Dashboard
+## NOTE: this resource will be created in kubernetes-dashboard
+## namespace!
+##
+## @param ingress.name Ingress metadata name
+## @param ingress.hostname Used to populate rule; connecting to this will connect to the dashboard
+## @param ingress.path Which path to cover for the rule
+## @param ingress.pathType The type of the path
+## @param ingress.serviceName The name of the backend service
+## @param ingress.servicePortNumber The port at which one should connect to the service
+ingress:
+  name: dashboard-ingress
+  hostname: dashboard.com
+  path: /
+  pathType: Prefix
+  serviceName: kubernetes-dashboard
+  servicePortNumber: 80
+
+## @section MongoDB secrets parameters
+## MongoDB secrets parameters used for establishing MongoDB root username and password
+## and for Mongo-Express to use these credentials to connect to the database
+##
+## @param mongoSecretName The metadata name for MongoDB secrets
+## @param mongoRootUsername The username of the database
+## @param mongoRootPassword The password associated with the username
+mongoSecretName: mongodb-secret
+mongoRootUsername: mongo
+mongoRootPassword: password
+
+## @section MongoExpress ConfigMap parameters
+## Mongo-Express ConfigMap parameters used to configure Mongo-Express
+##
+## @param mongoExpressName Establish MongoDB server to be the one set by this ConfigMap
+## @param mongoExpressDbUrl Use this value to determine the domain used to connect to the database
+## @param mongoExpressDbUrlKey Use this key to determine the domain to use to connect to the database
+mongoExpressName: mongo-express-configmap
+mongoExpressDbUrl: mongo
+mongoExpressDbUrlKey: database_url
+
+## @section MongoDB parameters
+## MongoDB parameters are what is used to populate deployment and service for MongoDb
+##
+## @param mongoDbStatefulSetName The name for this statefulset set as metadata
+## @param mongoDbStatefulSetAppLabel Used for both as app label and as selector for matchLabels
+## @param mongoDbStatefulSetReplicaCount How many replicas to be used with this statefulset
+## @param mongoDbStatefulSetContainerName The name associated with the container (image used: `mongo')
+## @param mongoDbStatefulSetContainerPort The port at which this container is reachable
+## @param mongoDbSecretRootUsername The secret identified by this name at which to find the username
+## @param mongoDbSecretRootUsernameKey The key in the secret which identifies the username to use
+## @param mongoDbSecretRootPassword The secret identified by this name at which to find the password
+## @param mongoDbSecretRootPasswordKey The key in the secret which identifies the password to use
+## @param mongoDbServiceClusterIP The cluster IP associated with this service (leave None)
+## @param mongoDbServicePortProtocol The protocol used by the service for the ports configured
+## @param mongoDbServicePortNumber The port number at which containers that are to be served by this service, listen
+## @param mongoDbServiceTargetPort The port number at which the service accepts requests to be forwarded to the containers
+## @param mongoDbVolumeName The name of the volume used by the container
+## @param mongoDbVolumeMountPath The path for where to mount the volume
+## @param mongoDbPvcName The name of the PersistentVolumeClaim to be used
+## @param mongoDbPvName The name of the PersistentVolume to be used
+## @param mongoDbPvCapacity The capacity of the persistent volume
+## @param mongoDbPvVolumeMode The volume mode of the PersistentVolume
+## @param mongoDbPvAccessMode The access mode of the PersistentVolume
+## @param mongoDbPvStorageClassName The storageClassName to be used with this PersistentVolume
+## @param mongoDbPvPath The hostPath for this PersistentVolume
+## @param mongoDbPvcStorageClassName The storageClassName to be used with this PersistentVolumeClaim
+## @param mongoDbPvcAccessMode The access mode associated with this PersistentVolumeClaim
+## @param mongoDbScName The StorageClass name
+## @param mongoDbScBindingMode The volume binding mode for this StorageClass
+mongoDbStatefulSetName: mongodb
+mongoDbStatefulSetAppLabel: mongodb
+mongoDbStatefulSetReplicaCount: 1
+mongoDbStatefulSetContainerName: mongodb
+mongoDbStatefulSetContainerPort: 27017
+mongoDbSecretRootUsername: mongodb-secret
+mongoDbSecretRootUsernameKey: mongo-root-username
+mongoDbSecretRootPassword: mongodb-secret
+mongoDbSecretRootPasswordKey: mongo-root-password
+mongoDbServiceClusterIP: None
+mongoDbServicePortProtocol: TCP
+mongoDbServicePortNumber: 27017
+mongoDbServiceTargetPort: 27017
+mongoDbVolumeName: mongo-volume
+mongoDbVolumeMountPath: /data/db
+mongoDbPvcName: mongo-pvc
+mongoDbPvName: mongo-pv
+mongoDbPvCapacity: 2Gi
+mongoDbPvVolumeMode: Filesystem
+mongoDbPvAccessMode: ReadWriteOnce
+mongoDbPvStorageClassName: local-storage
+mongoDbPvPath: /data
+mongoDbPvcStorageClassName: local-storage
+mongoDbPvcAccessMode: ReadWriteOnce
+mongoDbScName: local-storage
+mongoDbScBindingMode: WaitForFirstConsumer
+
+## @section Mongo-Express parameters
+## Mongo-Express parameters used to configure both deployment and service used by Mongo-Express
+##
+## @param mongoExpressDeploymentName The name with which to identify this deployment
+## @param mongoExpressDeploymentAppLabel The app label used for both app and selector
+## @param mongoExpressDeploymentReplicaCount How many replicas associated with this deployment
+## @param mongoExpressDeploymentContainerName The name of the container to be created with this deployment
+## @param mongoExpressDeploymentContainerPort The port at which the container should listen to
+## @param mongoExpressServicePortProtocol The protocol of the ports configured for the service
+## @param mongoExpressServicePortNumber The port number at which the container listens to
+## @param mongoExpressServiceTargetPort The port number at which the service accepts requests
+## @param mongoExpressServiceNodePort The port number at which the service accepts requests when serviced
+mongoExpressDeploymentName: mongo-express
+mongoExpressDeploymentAppLabel: mongo-express
+mongoExpressDeploymentReplicaCount: 1
+mongoExpressDeploymentContainerName: mongo-express
+mongoExpressDeploymentContainerPort: 8081
+mongoExpressServicePortProtocol: TCP
+mongoExpressServicePortNumber: 8081
+mongoExpressServiceTargetPort: 8081
+mongoExpressServiceNodePort: 30000

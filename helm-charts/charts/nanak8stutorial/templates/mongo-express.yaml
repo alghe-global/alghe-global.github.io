@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.mongoExpressDeploymentName }}
+  labels:
+    app: {{ .Values.mongoExpressDeploymentAppLabel }}
+spec:
+  replicas: {{ .Values.mongoExpressDeploymentReplicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Values.mongoExpressDeploymentAppLabel }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.mongoExpressDeploymentAppLabel }}
+    spec:
+      containers:
+      - name: {{ .Values.mongoExpressDeploymentContainerName }}
+        image: mongo-express
+        ports:
+        - containerPort: {{ .Values.mongoExpressDeploymentContainerPort }}
+        env:
+        - name: ME_CONFIG_MONGODB_ADMINUSERNAME
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.mongoDbSecretRootUsername }}
+              key: {{ .Values.mongoDbSecretRootUsernameKey }}
+        - name: ME_CONFIG_MONGODB_ADMINPASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.mongoDbSecretRootPassword }}
+              key: {{ .Values.mongoDbSecretRootPasswordKey }}
+        - name: ME_CONFIG_MONGODB_SERVER
+          valueFrom:
+            configMapKeyRef:
+              name: {{ .Values.mongoExpressName }}
+              key: {{ .Values.mongoExpressDbUrlKey }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.mongoExpressDeploymentAppLabel }}
+spec:
+  selector:
+    app: {{ .Values.mongoExpressDeploymentAppLabel }}
+  type: LoadBalancer  # External Service
+  ports:
+    - protocol: {{ .Values.mongoExpressServicePortProtocol }}
+      port: {{ .Values.mongoExpressServicePortNumber }}
+      targetPort: {{ .Values.mongoExpressServiceTargetPort }}
+      nodePort: {{ .Values.mongoExpressServiceNodePort }}  # external service port
