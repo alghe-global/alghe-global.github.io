@@ -1,0 +1,85 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ .Values.mongoDbStatefulSetName }}
+  labels:
+    app: {{ .Values.mongoDbStatefulSetAppLabel }}
+spec:
+  replicas: {{ .Values.mongoDbStatefulSetReplicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Values.mongoDbStatefulSetAppLabel }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.mongoDbStatefulSetAppLabel }}
+    spec:
+      containers:
+      - name: {{ .Values.mongoDbStatefulSetContainerName }}
+        image: mongo
+        ports:
+        - containerPort: {{ .Values.mongoDbStatefulSetContainerPort }}
+        env:
+        - name: MONGO_INITDB_ROOT_USERNAME
+          valueFrom: 
+            secretKeyRef:
+              name: {{ .Values.mongoDbSecretRootUsername }}
+              key: {{ .Values.mongoDbSecretRootUsernameKey }}
+        - name: MONGO_INITDB_ROOT_PASSWORD
+          valueFrom: 
+            secretKeyRef:
+              name: {{ .Values.mongoDbSecretRootPassword }}
+              key: {{ .Values.mongoDbSecretRootPasswordKey }}
+        volumeMounts:
+          - name: {{ .Values.mongoDbVolumeName }}
+            mountPath: {{ .Values.mongoDbVolumeMountPath | quote }}
+      volumes:
+        - name: {{ .Values.mongoDbVolumeName }}
+          persistentVolumeClaim:
+            claimName: {{ .Values.mongoDbPvcName }}
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: {{ .Values.mongoDbPvName }}
+spec:
+  capacity:
+    storage: {{ .Values.mongoDbPvCapacity }}
+  volumeMode: {{ .Values.mongoDbPvVolumeMode }}
+  accessModes:
+    - {{ .Values.mongoDbPvAccessMode }}
+  storageClassName: {{ .Values.mongoDbPvStorageClassName }}
+  hostPath:
+    path: {{ .Values.mongoDbPvPath }}
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ .Values.mongoDbPvcName }}
+spec:
+  storageClassName: {{ .Values.mongoDbPvcStorageClassName }}
+  accessModes:
+    - {{ .Values.mongoDbPvcAccessMode }}
+  resources:
+    requests:
+      storage: {{ .Values.mongoDbPvCapacity }}
+---
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: {{ .Values.mongoDbScName }}
+provisioner: kubernetes.io/no-provisioner
+volumeBindingMode: {{ .Values.MongoDbScBindingMode }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongo  # KEEP AS-IS. Otherwise, mongo-express complains `/docker-entrypoint.sh: line 15: mongo: Name does not resolve`
+spec:
+  selector:
+    app: {{ .Values.mongoDbStatefulSetAppLabel }}
+  clusterIP: {{ .Values.mongoDbServiceClusterIP }}
+  ports:
+    - protocol: {{ .Values.mongoDbServicePortProtocol }}
+      port: {{ .Values.mongoDbServicePortNumber }}
+      targetPort: {{ .Values.mongoDbServiceTargetPort }}

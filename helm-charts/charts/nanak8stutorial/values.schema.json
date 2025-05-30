@@ -1,0 +1,152 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "properties": {
+        "ingress": {
+            "properties": {
+                "hostname": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "path": {
+                    "type": "string"
+                },
+                "pathType": {
+                    "type": "string"
+                },
+                "serviceName": {
+                    "type": "string"
+                },
+                "servicePortNumber": {
+                    "type": "integer"
+                }
+            },
+            "type": "object"
+        },
+        "mongoDbPvAccessMode": {
+            "type": "string"
+        },
+        "mongoDbPvCapacity": {
+            "type": "string"
+        },
+        "mongoDbPvName": {
+            "type": "string"
+        },
+        "mongoDbPvPath": {
+            "type": "string"
+        },
+        "mongoDbPvStorageClassName": {
+            "type": "string"
+        },
+        "mongoDbPvVolumeMode": {
+            "type": "string"
+        },
+        "mongoDbPvcAccessMode": {
+            "type": "string"
+        },
+        "mongoDbPvcName": {
+            "type": "string"
+        },
+        "mongoDbPvcStorageClassName": {
+            "type": "string"
+        },
+        "mongoDbScBindingMode": {
+            "type": "string"
+        },
+        "mongoDbScName": {
+            "type": "string"
+        },
+        "mongoDbSecretRootPassword": {
+            "type": "string"
+        },
+        "mongoDbSecretRootPasswordKey": {
+            "type": "string"
+        },
+        "mongoDbSecretRootUsername": {
+            "type": "string"
+        },
+        "mongoDbSecretRootUsernameKey": {
+            "type": "string"
+        },
+        "mongoDbServiceClusterIP": {
+            "type": "string"
+        },
+        "mongoDbServicePortNumber": {
+            "type": "integer"
+        },
+        "mongoDbServicePortProtocol": {
+            "type": "string"
+        },
+        "mongoDbServiceTargetPort": {
+            "type": "integer"
+        },
+        "mongoDbStatefulSetAppLabel": {
+            "type": "string"
+        },
+        "mongoDbStatefulSetContainerName": {
+            "type": "string"
+        },
+        "mongoDbStatefulSetContainerPort": {
+            "type": "integer"
+        },
+        "mongoDbStatefulSetName": {
+            "type": "string"
+        },
+        "mongoDbStatefulSetReplicaCount": {
+            "type": "integer"
+        },
+        "mongoDbVolumeMountPath": {
+            "type": "string"
+        },
+        "mongoDbVolumeName": {
+            "type": "string"
+        },
+        "mongoExpressDbUrl": {
+            "type": "string"
+        },
+        "mongoExpressDbUrlKey": {
+            "type": "string"
+        },
+        "mongoExpressDeploymentAppLabel": {
+            "type": "string"
+        },
+        "mongoExpressDeploymentContainerName": {
+            "type": "string"
+        },
+        "mongoExpressDeploymentContainerPort": {
+            "type": "integer"
+        },
+        "mongoExpressDeploymentName": {
+            "type": "string"
+        },
+        "mongoExpressDeploymentReplicaCount": {
+            "type": "integer"
+        },
+        "mongoExpressName": {
+            "type": "string"
+        },
+        "mongoExpressServiceNodePort": {
+            "type": "integer"
+        },
+        "mongoExpressServicePortNumber": {
+            "type": "integer"
+        },
+        "mongoExpressServicePortProtocol": {
+            "type": "string"
+        },
+        "mongoExpressServiceTargetPort": {
+            "type": "integer"
+        },
+        "mongoRootPassword": {
+            "type": "string"
+        },
+        "mongoRootUsername": {
+            "type": "string"
+        },
+        "mongoSecretName": {
+            "type": "string"
+        }
+    },
+    "type": "object"
+}

@@ -1,0 +1,7 @@
+# SPDX-License-Identifier: APACHE-2.0
+
+# https://helm.sh/docs/topics/charts/#the-chartyaml-file 
+name: NanaK8sTutorial
+apiVersion: v2
+version: 1.0.0
+appVersion: "1.16.0"
