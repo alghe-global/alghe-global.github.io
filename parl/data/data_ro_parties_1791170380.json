@@ -1,0 +1,60 @@
+{
+    "PSD": {
+        "deputies": 84,
+        "senators": 36,
+        "total": 120
+    },
+    "Neafilia\u0163i": {
+        "deputies": 14,
+        "senators": 8,
+        "total": 22
+    },
+    "USR": {
+        "deputies": 40,
+        "senators": 19,
+        "total": 59
+    },
+    "Minoritati": {
+        "deputies": 17,
+        "total": 17
+    },
+    "PNL": {
+        "deputies": 53,
+        "senators": 22,
+        "total": 75
+    },
+    "PSD afiliat": {
+        "deputies": 7,
+        "total": 7
+    },
+    "AUR": {
+        "deputies": 61,
+        "senators": 28,
+        "total": 89
+    },
+    "SOS RO": {
+        "deputies": 13,
+        "total": 13
+    },
+    "UDMR": {
+        "deputies": 21,
+        "senators": 10,
+        "total": 31
+    },
+    "UPR": {
+        "deputies": 17,
+        "total": 17
+    },
+    "AUR afiliat": {
+        "deputies": 1,
+        "total": 1
+    },
+    "PNL afiliat": {
+        "deputies": 2,
+        "total": 2
+    },
+    "PACE": {
+        "senators": 11,
+        "total": 11
+    }
+}
