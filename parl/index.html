@@ -134,7 +134,7 @@ function setSnaps(list){
 }
 /* Găsește singur folderul data/ din repo-ul de pe github.io. Nu trebuie configurat nimic.
    (Opțional, doar pentru domenii proprii: adaugă ?repo=utilizator/repo la adresă.) */
-const GITHUB_REPO = "";
+const GITHUB_REPO = "alghe-global";
 const NAME_RE = /[\w.\-]*?\d{9,13}\.json/g;
 const tsOf = n => +n.match(/(\d{9,13})\.json$/)[1];
 const namesFrom = txt => [...new Set(String(txt).match(NAME_RE)||[])];
@@ -160,7 +160,7 @@ async function listDataFiles(log){
     repos.push(owner+"/"+host);                                            // site de utilizator
   }
   for(const repo of repos){
-    for(const dir of ["data","docs/data","public/data"]){
+    for(const dir of ["data","parl/data","public/data"]){
       if(n=await tryStep(`GitHub API ${repo}/${dir}`,async()=>{
         const j=await getJson(`https://api.github.com/repos/${repo}/contents/${dir}`);
         return namesFrom(j.map(f=>f.name).join("\n")); })){ try{localStorage.setItem("ro_names",JSON.stringify(n));}catch{} return n; }
