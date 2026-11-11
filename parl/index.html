@@ -117,7 +117,6 @@ const sortParties = names => [...names].sort((a,b)=>{
 
 /* ---------- Încărcare date ---------- */
 let snaps = [];          // [{ts, data}] sortate crescător
-const FILE_RE = /(\d{9,13})\.json$/i;
 const $ = id => document.getElementById(id);
 const status = (t,err=false)=>{ const s=$("status"); s.textContent=t; s.className=err?"err":""; };
 const tsToDate = ts => new Date(ts > 1e12 ? ts : ts*1000);
@@ -133,22 +132,74 @@ function setSnaps(list){
   sel.value = snaps.length-1;      // implicit: cel mai recent fișier
   render();
 }
-// Citește direct din data/ (doar citire: aplicația nu scrie și nu șterge nimic)
+/* Găsește singur folderul data/ din repo-ul de pe github.io. Nu trebuie configurat nimic.
+   (Opțional, doar pentru domenii proprii: adaugă ?repo=utilizator/repo la adresă.) */
+const GITHUB_REPO = "";
+const NAME_RE = /[\w.\-]*?\d{9,13}\.json/g;
+const tsOf = n => +n.match(/(\d{9,13})\.json$/)[1];
+const namesFrom = txt => [...new Set(String(txt).match(NAME_RE)||[])];
+async function getJson(url){ const r=await fetch(url); if(!r.ok) throw new Error("HTTP "+r.status); return r.json(); }
+
+async function listDataFiles(log){
+  const tryStep=async(label,fn)=>{ try{ const n=await fn(); if(n&&n.length){ log.push(label+": "+n.length+" fișiere"); return n; } log.push(label+": nimic găsit"); }
+                                    catch(e){ log.push(label+": "+(e.message||e)); } return null; };
+  let n;
+  // 1) manifest opțional
+  if(n=await tryStep("data/manifest.json",async()=>namesFrom(JSON.stringify(await getJson("data/manifest.json"))))) return n;
+  // 2) listare de director (servere locale, Apache, nginx)
+  if(n=await tryStep("data/ (listare)",async()=>{ const r=await fetch("data/"); if(!r.ok) throw new Error("HTTP "+r.status); return namesFrom(await r.text()); })) return n;
+
+  // 3) repo-ul GitHub se deduce din adresa paginii
+  const host=location.hostname, parts=location.pathname.split("/").filter(Boolean);
+  const forced=new URLSearchParams(location.search).get("repo")||GITHUB_REPO;
+  const repos=[];
+  if(forced) repos.push(forced);
+  else if(host.endsWith(".github.io")){
+    const owner=host.split(".")[0];
+    if(parts[0]&&!parts[0].includes(".")) repos.push(owner+"/"+parts[0]);   // site de proiect
+    repos.push(owner+"/"+host);                                            // site de utilizator
+  }
+  for(const repo of repos){
+    for(const dir of ["data","docs/data","public/data"]){
+      if(n=await tryStep(`GitHub API ${repo}/${dir}`,async()=>{
+        const j=await getJson(`https://api.github.com/repos/${repo}/contents/${dir}`);
+        return namesFrom(j.map(f=>f.name).join("\n")); })){ try{localStorage.setItem("ro_names",JSON.stringify(n));}catch{} return n; }
+    }
+  }
+  // 4) jsDelivr (listare publică a fișierelor din repo, fără limită strictă)
+  for(const repo of repos){
+    for(const ref of ["","@main","@master"]){
+      if(n=await tryStep(`jsDelivr ${repo}${ref}`,async()=>{
+        const j=await getJson(`https://data.jsdelivr.com/v1/packages/gh/${repo}${ref}?structure=flat`);
+        return namesFrom(j.files.map(f=>f.name).filter(x=>/^\/(docs\/|public\/)?data\//.test(x)).join("\n")); })){ try{localStorage.setItem("ro_names",JSON.stringify(n));}catch{} return n; }
+    }
+  }
+  // 5) ultima listă cunoscută
+  try{ const c=JSON.parse(localStorage.getItem("ro_names")||"[]"); if(c.length){ log.push("listă salvată: "+c.length+" fișiere"); return c; } }catch{}
+  return [];
+}
+
+// Fișierele deja cunoscute din data/ (se încarcă direct, fără nicio listare).
+// Fișierele noi apărute ulterior sunt găsite automat prin listarea de mai sus.
+const KNOWN = [1789961118,1790567542,1791170380,1791775011,1792381907,1792987090,1793590870,1794193221]
+  .map(t=>`data_ro_parties_${t}.json`);
+
+// Doar citire: aplicația nu scrie și nu șterge nimic
+let lastLog=[];
 async function autoLoad(){
-  try{
-    const html = await (await fetch("data/",{cache:"no-store"})).text();
-    const names=[...new Set([...html.matchAll(/data_ro_parties_(\d{9,13})\.json/g)].map(m=>m[0]))];
-    if(!names.length) throw new Error("listare goală");
-    const list=[]; let bad=0;
-    await Promise.all(names.map(async n=>{
-      try{ list.push({ts:+n.match(FILE_RE)[1], data:await (await fetch("data/"+n,{cache:"no-store"})).json(), name:n}); }
-      catch{ bad++; }
-    }));
-    setSnaps(list);
-    if(bad) status($("status").textContent+` ${bad} fișier(e) invalide ignorate.`,true);
-  }catch{
-    status("Nu pot citi data/. Browserul blochează accesul la fișiere locale din file:// – vezi instrucțiunile de mai jos.",true);
-    render();
+  let found=[];
+  try{ found=await listDataFiles(lastLog); }catch(e){ lastLog.push("listare: "+(e.message||e)); }
+  const names=[...new Set([...KNOWN,...found])];
+  const list=[]; let bad=0;
+  await Promise.all(names.map(async n=>{
+    try{ const r=await fetch("data/"+n,{cache:"no-store"});
+         if(!r.ok){ if(found.includes(n)) bad++; return; }          // fișierele cunoscute dar șterse se ignoră
+         list.push({ts:tsOf(n), data:await r.json(), name:n}); }
+    catch{ bad++; }
+  }));
+  setSnaps(list);
+  if(list.length){
+    status(`${list.length} fișiere încărcate din data/.`+(found.length?"":" Listarea automată nu a răspuns, deci fișierele noi nu sunt incluse.")+(bad?` ${bad} invalide ignorate.`:""), !found.length||bad>0);
   }
 }
 
@@ -247,9 +298,8 @@ function renderLine(){
 /* ---------- Comun ---------- */
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const empty=()=>`<div class="empty"><strong>Nu am putut citi fișierele din data/</strong>
-Browserele nu permit paginilor deschise din <code>file://</code> să citească foldere locale.<br>
-Soluții fără instalări: în Chrome/Edge pornește o dată cu <code>--allow-file-access-from-files</code>,
-sau pune <code>index.html</code> și <code>data/</code> pe orice server web static care listează directorul <code>data/</code>.</div>`;
+Folderul <code>data/</code> trebuie să fie în același repo cu <code>index.html</code> și să conțină fișiere cu timestamp în nume (ex. <code>data_ro_parties_1794193221.json</code>).
+<pre style="text-align:left;font-size:.8rem;white-space:pre-wrap;margin:14px auto 0;max-width:640px">${esc(lastLog.join("\n"))}</pre></div>`;
 function render(){ renderSeats(); renderLine(); }
 $("snap").addEventListener("change",renderSeats);
 function tab(which){
