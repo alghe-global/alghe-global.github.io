@@ -134,7 +134,7 @@ function setSnaps(list){
 }
 /* Găsește singur folderul data/ din repo-ul de pe github.io. Nu trebuie configurat nimic.
    (Opțional, doar pentru domenii proprii: adaugă ?repo=utilizator/repo la adresă.) */
-const GITHUB_REPO = "alghe-global";
+const GITHUB_REPO = "alghe-global/alghe-global.github.io";
 const NAME_RE = /[\w.\-]*?\d{9,13}\.json/g;
 const tsOf = n => +n.match(/(\d{9,13})\.json$/)[1];
 const namesFrom = txt => [...new Set(String(txt).match(NAME_RE)||[])];
