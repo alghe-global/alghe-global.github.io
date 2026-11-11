@@ -162,7 +162,7 @@ async function listDataFiles(log){
   for(const repo of repos){
     for(const dir of ["data","parl/data","public/data"]){
       if(n=await tryStep(`GitHub API ${repo}/${dir}`,async()=>{
-        const j=await getJson(`https://api.github.com/repos/${repo}/contents/${dir}`);
+        const j=await getJson(`https://api.github.com/repos/alghe-global/alghe-global.github.io/contents/parl/data`);
         return namesFrom(j.map(f=>f.name).join("\n")); })){ try{localStorage.setItem("ro_names",JSON.stringify(n));}catch{} return n; }
     }
   }
