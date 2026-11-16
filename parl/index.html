@@ -243,13 +243,18 @@ function renderSeats(){
       dots+=`<circle class="seat" data-p="${esc(p)}" cx="${s.x.toFixed(1)}" cy="${s.y.toFixed(1)}" r="${L.dot.toFixed(1)}" fill="${c}"/>`; } }
   const center=`<text class="ctr" x="${L.cx}" y="${L.cy-48}" text-anchor="middle" font-size="64" font-weight="600" font-family="Georgia,serif">${N}</text>
     <text class="ctr" x="${L.cx}" y="${L.cy-14}" text-anchor="middle" font-size="18" font-family="Georgia,serif" opacity=".7">parlamentari</text>`;
+  // procente cu o zecimală, rotunjite prin metoda celui mai mare rest, ca suma să fie exact 100,0%
+  const raw=parties.map(p=>1000*total(snap.data[p])/N), tenths=raw.map(Math.floor);
+  let left=1000-tenths.reduce((a,b)=>a+b,0);
+  raw.map((r,i)=>[r-tenths[i],i]).sort((a,b)=>b[0]-a[0]).forEach(([,i])=>{ if(left>0){tenths[i]++;left--;} });
+  const pct={}; parties.forEach((p,i)=>pct[p]=(tenths[i]/10).toFixed(1));
   const rowsHtml=parties.map(p=>{ const v=snap.data[p],t=total(v);
     return `<tr data-p="${esc(p)}"><td><span class="sw" style="background:${colorFor(p)}"></span> ${esc(p)}</td>
-      <td>${v.deputies??"–"}</td><td>${v.senators??"–"}</td><td>${t}</td><td>${(100*t/N).toFixed(1)}%</td></tr>`; }).join("");
+      <td>${v.deputies??"–"}</td><td>${v.senators??"–"}</td><td>${t}</td><td>${pct[p]}%</td></tr>`; }).join("");
   const sd=parties.reduce((a,p)=>a+(snap.data[p].deputies||0),0), ss=parties.reduce((a,p)=>a+(snap.data[p].senators||0),0);
   out.innerHTML=`<svg viewBox="0 0 ${L.W} ${L.H-20}" role="img" aria-label="Hemiciclu cu ${N} locuri">${dots}${center}</svg>
     <table><thead><tr><th>Partid</th><th>Deputați</th><th>Senatori</th><th>Total</th><th>Pondere</th></tr></thead>
-    <tbody>${rowsHtml}</tbody><tfoot><tr><td>Total</td><td>${sd}</td><td>${ss}</td><td>${N}</td><td></td></tr></tfoot></table>`;
+    <tbody>${rowsHtml}</tbody><tfoot><tr><td>Total</td><td>${sd}</td><td>${ss}</td><td>${N}</td><td>100.0%</td></tr></tfoot></table>`;
   const svg=out.querySelector("svg");
   const focus=p=>{ svg.querySelectorAll(".seat").forEach(c=>c.classList.toggle("dim",p!==null&&c.dataset.p!==p)); };
   svg.addEventListener("mousemove",e=>{ const c=e.target.closest(".seat"); if(!c){hideTip();focus(null);return;}
